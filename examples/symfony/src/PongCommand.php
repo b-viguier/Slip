@@ -25,11 +25,11 @@ class PongCommand extends Command
 
         Slip\sleep(1);
         while ($count--) {
-            echo "Pong\n";
+            $output->write("Pong\n");
             Slip\sleep(2);
         }
 
-        echo "Finished Pong\n";
+        $output->write("Finished Pong\n");
 
         return Command::SUCCESS;
     }
