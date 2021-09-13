@@ -5,11 +5,11 @@ require __DIR__.'/vendor/autoload.php';
 use Symfony\Component\Console\Application;
 
 bviguier\Slip\Slipper::run(
-    new bviguier\Slip\Slipper(launchCommand(...), \bviguier\example\PingCommand::class),
-    new bviguier\Slip\Slipper(launchCommand(...), \bviguier\example\PongCommand::class),
+    new bviguier\Slip\Slipper(runCommand(...), \bviguier\example\PingCommand::class),
+    new bviguier\Slip\Slipper(runCommand(...), \bviguier\example\PongCommand::class),
 );
 
-function launchCommand(string $className): void
+function runCommand(string $className): void
 {
     $application = new Application();
     $application->add($command = new $className());

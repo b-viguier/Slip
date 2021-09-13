@@ -25,16 +25,26 @@ function pong(int $count): string
     return "Finished Pong\n";
 }
 
-const LIMIT = 2;
+echo "Synchronous Execution\n";
+echo "=====================\n";
+echo ping(2); // Ping
+                    // Ping
+                    // Finished Ping
+echo pong(2); // Pong
+                    // Pong
+                    // Finished Pong
 
-echo "Synchronous Execution\n==================\n";
-echo ping(LIMIT);
-echo pong(LIMIT);
-
-echo "\nAsynchronous Execution\n==================\n";
+echo "\nAsynchronous Execution\n";
+echo "========================\n";
 echo join(
     Slip\Slipper::run(
-        new Slip\Slipper(ping(...), LIMIT),
-        new Slip\Slipper(pong(...), LIMIT),
+        new Slip\Slipper(ping(...), 2),
+        new Slip\Slipper(pong(...), 2),
     )
 );
+// Ping
+                // Pong
+// Ping
+                // Pong
+// Finished Ping
+                // Finished Pong
