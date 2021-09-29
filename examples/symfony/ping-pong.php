@@ -14,5 +14,6 @@ function runCommand(string $className): void
     $application = new Application();
     $application->add($command = new $className());
     $application->setDefaultCommand($command->getName(), true);
+    $application->setAutoExit(false);
     $application->run();
 }
