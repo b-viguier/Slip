@@ -24,11 +24,11 @@ class PingCommand extends Command
         $count = $input->getArgument('count');
 
         while ($count--) {
-            $output->write("Ping\n");
+            $output->writeln("Ping");
             Slip\sleep(2);
         }
 
-        $output->write("Finished Ping\n");
+        $output->writeln("Finished Ping");
 
         return Command::SUCCESS;
     }
