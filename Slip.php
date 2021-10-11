@@ -29,7 +29,7 @@ class Slipper
         $this->fiber = new \Fiber($callable);
         /**
          * The Fiber is executed until its first interruption (or end),
-         * returning the the amount of time to sleep (or null).
+         * returning the amount of time to sleep (or null).
          */
         $this->timeout = $this->fiber->start(...$args) ?? 0;
     }
@@ -73,7 +73,7 @@ class Slipper
              */
             if ($currentSlipper->timeout > $now) {
                 \bviguier\Slip\sleep($sleepTime = $currentSlipper->timeout - $now);
-                $now += $sleepTime;
+                $now += $sleepTime; // Not accurate, but enough for the purpose of this proof of concept.
             }
 
             /**
