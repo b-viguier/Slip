@@ -1,8 +1,10 @@
 # Slip
-Proof of concept of asynchronous programming with Php 8.1 and [Fiber](https://wiki.php.net/rfc/fibers)
+Proof of concept of asynchronous programming with Php 8.1 and [Fiber](https://wiki.php.net/rfc/fibers).
 
 
 **Slip** (pronounced like _"sleep"_ in english) is a _nano framework_ providing a non-blocking `sleep` function.
+
+**Slip** has been presented in a short talk at [ForumPhp 2021 (fr)](https://afup.org/talks/3794-fiber-la-porte-ouverte-sur-l-asynchrone).
 
 ## How to install
 Don't.
