@@ -5,10 +5,19 @@ namespace bviguier\Slip;
 /**
  * Non-blocking call if executed through a Slipper.
  */
+function usleep(int $microseconds): void
+{
+    if (\Fiber::getCurrent() !== null) {
+        \Fiber::suspend($microseconds);
+    } else {
+        \usleep($microseconds);
+    }
+}
+
 function sleep(int $seconds): void
 {
     if (\Fiber::getCurrent() !== null) {
-        \Fiber::suspend($seconds);
+        \Fiber::suspend($seconds * 1_000_000);
     } else {
         \sleep($seconds);
     }
@@ -21,7 +30,7 @@ class Slipper
 {
     /** The Fiber to execute */
     private \Fiber $fiber;
-    /** Time at which Fiber expects to be awaken */
+    /** Time at which Fiber expects to be awakened */
     private int $timeout;
 
     public function __construct(callable $callable, mixed ...$args)
@@ -51,7 +60,7 @@ class Slipper
              * Sorts Sleepers according to their timeout.
              * Shortest timeouts must be treated first!
              */
-            uasort($slippers, static fn(Slipper $a, Slipper $b): int => $a->timeout - $b->timeout);
+            uasort($slippers, static fn(Slipper $a, Slipper $b): int => $a->timeout <=> $b->timeout);
 
             /**
              * Pops the first element, and keep associated key to preserve order of returned values.
@@ -72,7 +81,7 @@ class Slipper
              * Sleeps until the timeout expected by the current Slipper
              */
             if ($currentSlipper->timeout > $now) {
-                \bviguier\Slip\sleep($sleepTime = $currentSlipper->timeout - $now);
+                \bviguier\Slip\usleep($sleepTime = (int)($currentSlipper->timeout - $now));
                 $now += $sleepTime; // Not accurate, but enough for the purpose of this proof of concept.
             }
 
@@ -80,8 +89,11 @@ class Slipper
              * Resumes the current Slippers, retrieves its new timeout
              * and queue it again for further treatment.
              */
+            $start = microtime(true);
             $duration = $currentSlipper->fiber->resume() ?? 0;
-            $currentSlipper->timeout = $now + $duration;
+            $now += (microtime(true) - $start) * 1_000_000;
+
+            $currentSlipper->timeout = (int)($now + $duration);
             $slippers[$slipperId] = $currentSlipper;
         }
 
